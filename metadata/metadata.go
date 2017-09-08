@@ -205,6 +205,52 @@ func (m *client) GetStackByName(name string) (Stack, error) {
 	return stack, nil
 }
 
+// GetServiceByRegionEnvironmnent() (*metdata.Service, error)
+// GetServiceByEnvironment() (*metadata.Service, error)
+// GetServiceByName() (*metadata.Service, error)
+
+func (m *client) GetServiceByRegionEnvironment(regionName string, envName string, stackName string, svcName string) (Service, error) {
+	resp, err := m.SendRequest("/regions/" + regionName + "/environments/" + envName + "/stacks/" + stackName + "/services/" + svcName)
+	var service Service
+	if err != nil {
+		return service, err
+	}
+
+	if err = json.Unmarshal(resp, &service); err != nil {
+		return service, err
+	}
+
+	return service, nil
+}
+
+func (m *client) GetServiceByEnvironment(envName string, stackName string, svcName string) (Service, error) {
+	resp, err := m.SendRequest("/environments/" + envName + "/stacks/" + stackName + "/services/" + svcName)
+	var service Service
+	if err != nil {
+		return service, err
+	}
+
+	if err = json.Unmarshal(resp, &service); err != nil {
+		return service, err
+	}
+
+	return service, nil
+}
+
+func (m *client) GetServiceByName(stackName string, svcName string) (Service, error) {
+	resp, err := m.SendRequest("/stacks/" + stackName + "/services/" + svcName)
+	var service Service
+	if err != nil {
+		return service, err
+	}
+
+	if err = json.Unmarshal(resp, &service); err != nil {
+		return service, err
+	}
+
+	return service, nil
+}
+
 func (m *client) GetContainers() ([]Container, error) {
 	resp, err := m.SendRequest("/containers")
 	var containers []Container
